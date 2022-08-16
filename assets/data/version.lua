@@ -1,1 +1,1 @@
-1.2
+getgenv().scriptver = "v1.2"
