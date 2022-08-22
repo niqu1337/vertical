@@ -248,7 +248,7 @@ function boxBase:Update()
 			
 			if ESP.Info.Distance == true then
 				self.Components.Distance.Visible = true
-				self.Components.Distance.Position = Vector2.new(TagPos.X, TagPos.Y - Offset) -- nwm czy nie usunąć -offset :thinking:
+				self.Components.Distance.Position = Vector2.new(TagPos.X, TagPos.Y - Offset)
 				self.Components.Distance.Text = "["..math.floor((CurrentCamera.CFrame.p - cf.p).magnitude).."]"
 				self.Components.Distance.Color = color
 				Offset = Offset + 14
