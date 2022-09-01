@@ -19,18 +19,17 @@ local ESP = {
     Color = Color3.fromRGB(255, 255, 255),
     TargetPlayers = true,
     FaceCamera = true,
-    Thickness = 1,
+    Thickness = 0.5,
+    TextSize = 15,
     AttachShift = 1,
     Objects = setmetatable({}, {__mode="kv"}),
     Overrides = {}
 }
 
---Declarations--
 local LocalPlayer = game.Players.LocalPlayer
 local CurrentCamera = workspace.CurrentCamera
 local WorldToViewportPoint = CurrentCamera.WorldToViewportPoint
 
---Functions--
 local function Draw(obj, props)
 	local new = Drawing.new(obj)
 	
@@ -72,7 +71,7 @@ function ESP:GetColor(obj)
 	
     local p = self:GetPlrFromChar(obj)
 	
-	return p and (self.UseTeamColor and p.Team and p.Team.TeamColor.Color) or (p.Team and p.Team.TeamColor ~= LocalPlayer.Team.TeamColor and self.EnemyColor or self.TeamColor) -- self.Color
+	return p and (self.UseTeamColor and p.Team and p.Team.TeamColor.Color) or (p.Team and p.Team.TeamColor ~= LocalPlayer.Team.TeamColor and self.EnemyColor or self.TeamColor)
 end
 
 function ESP:GetPlrFromChar(char)
@@ -89,7 +88,7 @@ function ESP:Toggle(bool)
     self.Enabled = bool
     if not bool then
         for i,v in pairs(self.Objects) do
-            if v.Type == "Box" then --fov circle etc
+            if v.Type == "Box" then
                 if v.Temporary then
                     v:Remove()
                 else
@@ -198,7 +197,6 @@ function boxBase:Update()
         color = ESP.HighlightColor
     end
 
-    --calculations--
     local cf = self.PrimaryPart.CFrame + Vector3.new(0, 1, 0)
 	
     if ESP.FaceCamera then
@@ -351,7 +349,7 @@ function ESP:Add(obj, options)
 		Color = box.Color,
 		Center = true,
 		Outline = true,
-        Size = 19,
+        Size = TextSize,
         Visible = self.Enabled and self.ShowInfo
 	})
 	
@@ -359,7 +357,7 @@ function ESP:Add(obj, options)
 		Color = box.Color,
 		Center = true,
 		Outline = true,
-        Size = 19,
+        Size = TextSize,
         Visible = self.Enabled and self.ShowInfo
 	})
 	
@@ -367,7 +365,7 @@ function ESP:Add(obj, options)
 		Color = box.Color,
 		Center = true,
 		Outline = true,
-        Size = 19,
+        Size = TextSize,
         Visible = self.Enabled and self.ShowInfo
 	})
 	
@@ -375,7 +373,7 @@ function ESP:Add(obj, options)
 		Color = box.Color,
 		Center = true,
 		Outline = true,
-        Size = 19,
+        Size = TextSize,
         Visible = self.Enabled and self.ShowInfo
 	})
 	
@@ -473,7 +471,7 @@ game:GetService("RunService").RenderStepped:Connect(function()
             local success, errorMSG = pcall(v.Update, v)
 			
             if not success then
-				warn("[EU]", errorMSG, v.Object:GetFullName())
+				warn("[V:ESP] - ", errorMSG, v.Object:GetFullName())
 			end
         end
     end
