@@ -3399,55 +3399,64 @@ function library:CreateWindow(name, size, hidebutton)
         function tab:CreateConfigSystem(side)
             local configSystem = { }
 
-            configSystem.configFolder = window.name .. "/" .. tostring(game.PlaceId)
+            configSystem.configFolder = "vertical"
             if (not isfolder(configSystem.configFolder)) then
                 makefolder(configSystem.configFolder)
             end
 
-            configSystem.sector = tab:CreateSector("Configs", side or "left")
+            configSystem.sector = tab:CreateSector("configuration options", side or "left")
 
-            local ConfigName = configSystem.sector:AddTextbox("Config Name", "", ConfigName, function() end, "")
+            local ConfigName = configSystem.sector:AddTextbox("config name", "", ConfigName, function() end, "")
             local default = tostring(listfiles(configSystem.configFolder)[1] or ""):gsub(configSystem.configFolder .. "\\", ""):gsub(".txt", "")
-            local Config = configSystem.sector:AddDropdown("Configs", {}, default, false, function() end, "")
+            local Config = configSystem.sector:AddDropdown("configs", {}, default, false, function() end, "")
             for i,v in pairs(listfiles(configSystem.configFolder)) do
                 if v:find(".txt") then
                     Config:Add(tostring(v):gsub(configSystem.configFolder .. "\\", ""):gsub(".txt", ""))
                 end
             end
 
-            configSystem.Create = configSystem.sector:AddButton("Create", function()
-                for i,v in pairs(listfiles(configSystem.configFolder)) do
-                    Config:Remove(tostring(v):gsub(configSystem.configFolder .. "\\", ""):gsub(".txt", ""))
-                end
-
-                if ConfigName:Get() and ConfigName:Get() ~= "" then
-                    local config = {}
-    
-                    for i,v in pairs(library.flags) do
-                        if (v ~= nil and v ~= "") then
-                            if (typeof(v) == "Color3") then
-                                config[i] = { v.R, v.G, v.B }
-                            elseif (tostring(v):find("Enum.KeyCode")) then
-                                config[i] = v.Name
-                            elseif (typeof(v) == "table") then
-                                config[i] = { v }
+            configSystem.Load = configSystem.sector:AddButton("load", function()
+                local Success = pcall(readfile, configSystem.configFolder .. "/" .. Config:Get() .. ".txt")
+                if (Success) then
+                    pcall(function()
+                        local ReadConfig = httpservice:JSONDecode(readfile(configSystem.configFolder .. "/" .. Config:Get() .. ".txt"))
+                        local NewConfig = {}
+                        for i,v in pairs(ReadConfig) do
+                            if (typeof(v) == "table") then
+                                if (typeof(v[1]) == "number") then
+                                    NewConfig[i] = Color3.new(v[1], v[2], v[3])
+                                elseif (typeof(v[1]) == "table") then
+                                    NewConfig[i] = v[1]
+                                end
+                            elseif (tostring(v):find("Enum.KeyCode.")) then
+                                NewConfig[i] = Enum.KeyCode[tostring(v):gsub("Enum.KeyCode.", "")]
                             else
-                                config[i] = v
+                                NewConfig[i] = v
                             end
                         end
-                    end
-    
-                    writefile(configSystem.configFolder .. "/" .. ConfigName:Get() .. ".txt", httpservice:JSONEncode(config))
-    
-                    for i,v in pairs(listfiles(configSystem.configFolder)) do
-                        if v:find(".txt") then
-                            Config:Add(tostring(v):gsub(configSystem.configFolder .. "\\", ""):gsub(".txt", ""))
+                        library.flags = NewConfig
+                        for i,v in pairs(library.flags) do
+                            for i2,v2 in pairs(library.items) do
+                                if (i ~= nil and i ~= "" and i ~= "Configs_Name" and i ~= "Configs" and v2.flag ~= nil) then
+                                    if (v2.flag == i) then
+                                        pcall(function()
+                                            v2:Set(v)
+                                        end)
+                                    end
+                                end
+                            end
                         end
-                    end
+                    end)
+
+                    getgenv().VERTICAL_SENDNOTIFY({
+                        Title = "vertical : hydro-software.com";
+                        Description = "Successfully loaded config";
+                        Duration = 3;
+                    });
                 end
             end)
 
-            configSystem.Save = configSystem.sector:AddButton("Save", function()
+            configSystem.Save = configSystem.sector:AddButton("save", function()
                 local config = {}
                 if Config:Get() and Config:Get() ~= "" then
                     for i,v in pairs(library.flags) do
@@ -3463,50 +3472,52 @@ function library:CreateWindow(name, size, hidebutton)
                             end
                         end
                     end
-    
                     writefile(configSystem.configFolder .. "/" .. Config:Get() .. ".txt", httpservice:JSONEncode(config))
+
+                    getgenv().VERTICAL_SENDNOTIFY({
+                        Title = "vertical : hydro-software.com";
+                        Description = "Successfully saved config";
+                        Duration = 3;
+                    });
                 end
             end)
 
-            configSystem.Load = configSystem.sector:AddButton("Load", function()
-                local Success = pcall(readfile, configSystem.configFolder .. "/" .. Config:Get() .. ".txt")
-                if (Success) then
-                    pcall(function() 
-                        local ReadConfig = httpservice:JSONDecode(readfile(configSystem.configFolder .. "/" .. Config:Get() .. ".txt"))
-                        local NewConfig = {}
-    
-                        for i,v in pairs(ReadConfig) do
-                            if (typeof(v) == "table") then
-                                if (typeof(v[1]) == "number") then
-                                    NewConfig[i] = Color3.new(v[1], v[2], v[3])
-                                elseif (typeof(v[1]) == "table") then
-                                    NewConfig[i] = v[1]
-                                end
-                            elseif (tostring(v):find("Enum.KeyCode.")) then
-                                NewConfig[i] = Enum.KeyCode[tostring(v):gsub("Enum.KeyCode.", "")]
+
+            configSystem.Create = configSystem.sector:AddButton("create", function()
+                for i,v in pairs(listfiles(configSystem.configFolder)) do
+                    Config:Remove(tostring(v):gsub(configSystem.configFolder .. "\\", ""):gsub(".txt", ""))
+                end
+                if ConfigName:Get() and ConfigName:Get() ~= "" then
+                    local config = {}
+                    for i,v in pairs(library.flags) do
+                        if (v ~= nil and v ~= "") then
+                            if (typeof(v) == "Color3") then
+                                config[i] = { v.R, v.G, v.B }
+                            elseif (tostring(v):find("Enum.KeyCode")) then
+                                config[i] = v.Name
+                            elseif (typeof(v) == "table") then
+                                config[i] = { v }
                             else
-                                NewConfig[i] = v
+                                config[i] = v
                             end
                         end
-    
-                        library.flags = NewConfig
-    
-                        for i,v in pairs(library.flags) do
-                            for i2,v2 in pairs(library.items) do
-                                if (i ~= nil and i ~= "" and i ~= "Configs_Name" and i ~= "Configs" and v2.flag ~= nil) then
-                                    if (v2.flag == i) then
-                                        pcall(function() 
-                                            v2:Set(v)
-                                        end)
-                                    end
-                                end
-                            end
+                    end
+                    writefile(configSystem.configFolder .. "/" .. ConfigName:Get() .. ".txt", httpservice:JSONEncode(config))
+                    for i,v in pairs(listfiles(configSystem.configFolder)) do
+                        if v:find(".txt") then
+                            Config:Add(tostring(v):gsub(configSystem.configFolder .. "\\", ""):gsub(".txt", ""))
                         end
-                    end)
+                    end
+
+                    getgenv().VERTICAL_SENDNOTIFY({
+                        Title = "vertical : hydro-software.com";
+                        Description = "Successfully created config";
+                        Duration = 3;
+                    });
                 end
             end)
 
-            configSystem.Delete = configSystem.sector:AddButton("Delete", function()
+            configSystem.Delete = configSystem.sector:AddButton("delete", function()
                 for i,v in pairs(listfiles(configSystem.configFolder)) do
                     Config:Remove(tostring(v):gsub(configSystem.configFolder .. "\\", ""):gsub(".txt", ""))
                 end
@@ -3520,6 +3531,12 @@ function library:CreateWindow(name, size, hidebutton)
                         Config:Add(tostring(v):gsub(configSystem.configFolder .. "\\", ""):gsub(".txt", ""))
                     end
                 end
+
+                getgenv().VERTICAL_SENDNOTIFY({
+                    Title = "vertical : hydro-software.com";
+                    Description = "Successfully deleted config";
+                    Duration = 3;
+                });
             end)
 
             return configSystem
@@ -3530,7 +3547,7 @@ function library:CreateWindow(name, size, hidebutton)
             local list = { }
             list.name = name or ""
 
-            list.Main = Instance.new("Frame", tab.TabPage) 
+            list.Main = Instance.new("Frame", tab.TabPage)
             list.Main.Name = list.name:gsub(" ", "") .. "Sector"
             list.Main.BorderColor3 = window.theme.outlinecolor
             list.Main.ZIndex = 2
