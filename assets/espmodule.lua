@@ -1,17 +1,17 @@
 local ESP = {
     Enabled = false,
-	Tracers = true,
-    Boxes = true,
-    ShowInfo = true,
-    UseTeamColor = true,
+	Tracers = false,
+    Boxes = false,
+    ShowInfo = false,
+    UseTeamColor = false,
 	TeamColor = Color3.fromRGB(98, 50, 168),
 	EnemyColor = Color3.fromRGB(98, 50, 168),
     ShowTeam = true,
 	Info = {
-		["Name"] = true,
-		["Health"] = true,
-		["Weapons"] = true,
-		["Distance"] = true
+		["Name"] = false,
+		["Health"] = false,
+		["Weapons"] = false,
+		["Distance"] = false
 	},
 	
     BoxShift = CFrame.new(0, -1.5, 0),

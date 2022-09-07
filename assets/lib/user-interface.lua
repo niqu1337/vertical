@@ -22,7 +22,7 @@ library.theme = {
     font = Enum.Font.Code,
     background = "rbxassetid://5553946656",
     tilesize = 80,
-    cursor = false,
+    cursor = true,
     cursorimg = "https://raw.githubusercontent.com/niqu1337/evil-ware/main/assets/lib/cursor.png",
     backgroundcolor = Color3.fromRGB(20, 20, 20),
     tabstextcolor = Color3.fromRGB(240, 240, 240),
@@ -93,7 +93,7 @@ function library:CreateWatermark(name, position)
     watermark.mainbar.BorderSizePixel = 0
     watermark.mainbar.ZIndex = 5
     watermark.mainbar.AnchorPoint = Vector2.new(0.5, 0)
-    watermark.mainbar.Position = UDim2.new(0.5, 0, 0, 0)
+    watermark.mainbar.Position = UDim2.new(0.5, 0, 0.05, 0)
     watermark.mainbar.Size = UDim2.new(0, 0, 0, 25)
 
     watermark.Gradient = Instance.new("UIGradient", watermark.mainbar)

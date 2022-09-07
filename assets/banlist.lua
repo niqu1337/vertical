@@ -2,5 +2,6 @@ return {
     169101554, -- JustGotRipped
     822527369, -- WellYouSucc
     160153005, -- SerdarHD
-	235781707
+    2339949274, -- SqeakP
+	235781707 -- alt
 }
