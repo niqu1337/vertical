@@ -43,7 +43,7 @@ library.theme = {
 }
 
 if library.theme.cursor and Drawing then
-    local success = pcall(function() 
+    local success = pcall(function()
         library.cursor = Drawing.new("Image")
         library.cursor.Data = game:HttpGet(library.theme.cursorimg)
         library.cursor.Size = Vector2.new(64, 64)
@@ -145,7 +145,7 @@ function library:CreateWatermark(name, position)
     watermark.Outline.Size = watermark.mainbar.Size + UDim2.fromOffset(2, 2)
     watermark.BlackOutline.Size = watermark.mainbar.Size + UDim2.fromOffset(4, 4)
 
-    watermark.mainbar.Size = UDim2.new(0, watermark.label.TextBounds.X+4, 0, 25)    
+    watermark.mainbar.Size = UDim2.new(0, watermark.label.TextBounds.X+4, 0, 25)
     watermark.label.Size = UDim2.new(0, watermark.label.TextBounds.X+4, 0, 25)
     watermark.topbar.Size = UDim2.new(0, watermark.label.TextBounds.X+6, 0, 1)
     watermark.Outline.Size = watermark.mainbar.Size + UDim2.fromOffset(2, 2)
@@ -166,7 +166,7 @@ function library:CreateWatermark(name, position)
         if name:find("{fps}") then
             local currentTime = os.clock()
             counter = counter + 1
-            if currentTime - startTime >= 1 then 
+            if currentTime - startTime >= 1 then
                 local fps = math.floor(counter / (currentTime - startTime))
                 counter = 0
                 startTime = currentTime
@@ -288,10 +288,10 @@ function library:CreateWindow(name, size, hidebutton)
 
     local function checkIfGuiInFront(Pos)
         local objects = coregui:GetGuiObjectsAtPosition(Pos.X, Pos.Y)
-        for i,v in pairs(objects) do 
-            if not string.find(v:GetFullName(), window.name) then 
+        for i,v in pairs(objects) do
+            if not string.find(v:GetFullName(), window.name) then
                 table.remove(objects, i)
-            end 
+            end
         end
         return (#objects ~= 0 and objects[1].AbsolutePosition ~= Pos)
     end
@@ -403,7 +403,7 @@ function library:CreateWindow(name, size, hidebutton)
     window.BackgroundImage.Size = UDim2.fromOffset(window.size.X.Offset, window.size.Y.Offset - window.TopBar.AbsoluteSize.Y - 1)
     window.BackgroundImage.Image = window.theme.background or ""
     window.BackgroundImage.ImageTransparency = window.BackgroundImage.Image ~= "" and 0 or 1
-    window.BackgroundImage.ImageColor3 = Color3.new() 
+    window.BackgroundImage.ImageColor3 = Color3.new()
     window.BackgroundImage.BackgroundColor3 = window.theme.backgroundcolor
     window.BackgroundImage.TileSize = UDim2.new(0, window.theme.tilesize, 0, window.theme.tilesize)
     updateevent.Event:Connect(function(theme)
@@ -3406,7 +3406,7 @@ function library:CreateWindow(name, size, hidebutton)
 
             configSystem.sector = tab:CreateSector("configuration options", side or "left")
 
-            local ConfigName = configSystem.sector:AddTextbox("config name", "config-" ..math.random(1, 9999), ConfigName, function() end, "")
+            local ConfigName = configSystem.sector:AddTextbox("config name", "example-name", ConfigName, function() end, "")
             local default = tostring(listfiles(configSystem.configFolder)[1] or ""):gsub(configSystem.configFolder .. "\\", ""):gsub(".txt", "")
             local Config = configSystem.sector:AddDropdown("configs", {}, default, false, function() end, "")
             for i,v in pairs(listfiles(configSystem.configFolder)) do
