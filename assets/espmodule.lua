@@ -469,10 +469,6 @@ game:GetService("RunService").RenderStepped:Connect(function()
     for i,v in (ESP.Enabled and pairs or ipairs)(ESP.Objects) do
         if v.Update then
             local success, errorMSG = pcall(v.Update, v)
-			
-            if not success then
-				warn("[V:ESP] - ", errorMSG, v.Object:GetFullName())
-			end
         end
     end
 end)
