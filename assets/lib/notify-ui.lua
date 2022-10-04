@@ -1,3 +1,8 @@
+if getgenv().v_sendnotif then
+	warn("[vertical] - couldnt load notify-ui because it is already loaded")
+	retrun false
+end
+
 local TweenService = game:GetService("TweenService");
 local RunService = game:GetService("RunService");
 local TextService = game:GetService("TextService");
