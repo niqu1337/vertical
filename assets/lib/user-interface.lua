@@ -229,7 +229,7 @@ function library:CreateWindow(name, size, hidebutton)
 
     window.Main = Instance.new("ScreenGui", coregui)
     window.Main.Name = name
-    window.Main.DisplayOrder = 15
+    window.Main.DisplayOrder = 88
     if syn then
         syn.protect_gui(window.Main)
     end
