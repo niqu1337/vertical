@@ -1,3 +1,6 @@
+if game:GetService("CoreGui"):FindFirstChild("vnotify") then
+	game:GetService("CoreGui").vnotify:Destroy()
+end
 
 local TweenService = game:GetService("TweenService");
 local RunService = game:GetService("RunService");
@@ -5,7 +8,7 @@ local TextService = game:GetService("TextService");
 local Player = game:GetService("Players").LocalPlayer;
 
 local NotifGui = Instance.new("ScreenGui");
-NotifGui.Name = "verticalnotify";
+NotifGui.Name = "vnotify";
 NotifGui.Parent = RunService:IsStudio() and Player.PlayerGui or game:GetService("CoreGui");
 
 local Container = Instance.new("Frame");
