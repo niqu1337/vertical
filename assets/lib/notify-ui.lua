@@ -97,7 +97,7 @@ local TitleSettings = {
 
 local DescriptionSettings = {
 	Font = Enum.Font.Code;
-	Size = 14;
+	Size = 13;
 }
 
 local MaxWidth = (Container.AbsoluteSize.X - Padding - DescriptionPadding);

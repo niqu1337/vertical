@@ -3397,7 +3397,6 @@ function library:CreateWindow(name, size, hidebutton)
         end
 
         function tab:CreateConfigSystem(side)
-			local sendnotify = getgenv().v_sendnotif
             local configSystem = { }
 
             configSystem.configFolder = "vertical"
@@ -3448,12 +3447,6 @@ function library:CreateWindow(name, size, hidebutton)
                             end
                         end
                     end)
-
-                    sendnotify({
-                        Title = "vertical";
-                        Description = "Successfully loaded config";
-                        Duration = 3;
-                    });
                 end
             end)
 
@@ -3474,12 +3467,6 @@ function library:CreateWindow(name, size, hidebutton)
                         end
                     end
                     writefile(configSystem.configFolder .. "/" .. Config:Get() .. ".txt", httpservice:JSONEncode(config))
-
-                    sendnotify({
-                        Title = "vertical";
-                        Description = "Successfully saved config";
-                        Duration = 3;
-                    });
                 end
             end)
 
@@ -3509,12 +3496,6 @@ function library:CreateWindow(name, size, hidebutton)
                             Config:Add(tostring(v):gsub(configSystem.configFolder .. "\\", ""):gsub(".txt", ""))
                         end
                     end
-
-                    sendnotify({
-                        Title = "vertical";
-                        Description = "Successfully created config";
-                        Duration = 3;
-                    });
                 end
             end)
 
@@ -3532,12 +3513,6 @@ function library:CreateWindow(name, size, hidebutton)
                         Config:Add(tostring(v):gsub(configSystem.configFolder .. "\\", ""):gsub(".txt", ""))
                     end
                 end
-
-                sendnotify({
-                    Title = "vertical";
-                    Description = "Successfully deleted config";
-                    Duration = 3;
-                });
             end)
 
             return configSystem
