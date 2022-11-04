@@ -281,7 +281,7 @@ end
 -- Scripts
 
 Inviter.Gui = SelfModules.UI.Create("ScreenGui", {
-	Name = "example",
+	Name = HS:GenerateGUID(false),
 	ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
 })
 
