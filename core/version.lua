@@ -1,1 +1,1 @@
-return "1.0"
+local serverversion = "1.0"
