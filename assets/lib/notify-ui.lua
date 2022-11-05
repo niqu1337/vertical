@@ -1,3 +1,4 @@
+getgenv().v_serverver = "1.0"
 if game:GetService("CoreGui"):FindFirstChild("vnotify") then
 	game:GetService("CoreGui").vnotify:Destroy()
 end
