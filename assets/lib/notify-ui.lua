@@ -92,7 +92,7 @@ RunService:BindToRenderStep("UpdateList", 0, Update);
 
 local TitleSettings = {
 	Font = Enum.Font.Code;
-	Size = 15;
+	Size = 14;
 }
 
 local DescriptionSettings = {

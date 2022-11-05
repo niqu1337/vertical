@@ -2897,7 +2897,8 @@ function library:CreateWindow(name, size, hidebutton)
                     ["LeftControl"] = "LCTRL",
                     ["RightControl"] = "RCTRL",
                     ["LeftAlt"] = "LALT",
-                    ["RightAlt"] = "RALT"
+                    ["RightAlt"] = "RALT",
+					["CapsLock"] = "CAPS"
                 }
 
                 function keybind:Set(value)
