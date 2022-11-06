@@ -915,12 +915,13 @@ function library:CreateWindow(name, size, hidebutton)
                     keybind.flag = flag or ( (toggle.text or "") .. tostring(#toggle.Items:GetChildren()))
 
                     local shorter_keycodes = {
-                        ["LeftShift"] = "LSHIFT",
-                        ["RightShift"] = "RSHIFT",
-                        ["LeftControl"] = "LCTRL",
-                        ["RightControl"] = "RCTRL",
-                        ["LeftAlt"] = "LALT",
-                        ["RightAlt"] = "RALT"
+						["LeftShift"] = "LSHIFT",
+						["RightShift"] = "RSHIFT",
+						["LeftControl"] = "LCTRL",
+						["RightControl"] = "RCTRL",
+						["LeftAlt"] = "LALT",
+						["RightAlt"] = "RALT",
+						["CapsLock"] = "CAPS"
                     }
 
                     local text = keybind.default == "None" and "[None]" or "[" .. (shorter_keycodes[keybind.default.Name] or keybind.default.Name) .. "]"
