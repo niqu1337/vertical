@@ -1,4 +1,9 @@
 return {
 	169101554, -- JustGotRipped
-	822527369 -- WellYouSucc
+	822527369, -- WellYouSucc
+	32755093, -- adamdud
+	2033827361, -- 12321N4444
+	235781707, -- Wanwood9843133878028
+	2646842087, -- XeRyNeK
+	675877631 -- TwojaStara12356
 }
