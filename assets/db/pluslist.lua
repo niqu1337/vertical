@@ -6,5 +6,6 @@ return {
 	652369564, -- v576_3
 	1741485961, -- xL00king (Beta Tester)
 	454187280, -- spIooq (Booster)
-	3797929273 -- ulkucudhc (Booster)
+	3797929273, -- ulkucudhc (Booster)
+	135445381, -- SuzulIz (Booster)
 }
