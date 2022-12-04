@@ -10,7 +10,6 @@ return {
 	454187280, -- spIooq (Booster)
 	2860743949, -- EynTreo (Booster)
 	135445381, -- SuzulIz (Booster)
-	2633688242, -- salvador76546OG (Booster)
 	3164974566, -- lIpewIlpewIl (Booster)
 	274471130, -- Aominekun123
 }
