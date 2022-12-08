@@ -13,4 +13,5 @@ return {
 	135445381, -- SuzulIz (Booster)
 	3164974566, -- lIpewIlpewIl (Booster)
 	274471130, -- Aominekun123
+	44208538, -- suvfixs
 }
