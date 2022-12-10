@@ -14,4 +14,5 @@ return {
 	3164974566, -- lIpewIlpewIl (Booster)
 	274471130, -- Aominekun123
 	44208538, -- suvfixs
+	1407500712, -- XxNate201xX (1049539112438341734 booster)
 }
