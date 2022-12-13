@@ -8,11 +8,8 @@ return {
 	652369564, -- v576_3
 	1741485961, -- xL00king
 	581023521, -- wv_te
-	454187280, -- spIooq (Booster)
-	2860743949, -- EynTreo (Booster)
-	135445381, -- SuzulIz (Booster)
-	3164974566, -- lIpewIlpewIl (Booster)
+	2860743949, -- EynTreo (845369335236001802 Booster)
 	274471130, -- Aominekun123
 	44208538, -- suvfixs
-	1407500712, -- XxNate201xX (1049539112438341734 booster)
+	1407500712, -- XxNate201xX (1049539112438341734 Booster)
 }
