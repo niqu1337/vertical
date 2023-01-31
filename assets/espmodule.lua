@@ -404,215 +404,214 @@ function espLibrary:Load(renderValue)
         self.addEsp(player);
         self.addChams(player);
     end
-    task.spawn(function()
-        runService:BindToRenderStep("esp_rendering", renderValue or (Enum.RenderPriority.Camera.Value + 1), function()
-            for player, objects in next, self.espCache do
-                local character, torso = self.getCharacter(player);
-    
-                if (character and torso) then
-                    local onScreen, size, position, torsoPosition = self.getBoxData(torso.Position, Vector3.new(5, 6));
-                    local distance = (currentCamera.CFrame.Position - torso.Position).Magnitude;
-                    local canShow, enabled = onScreen and (size and position), self.options.enabled;
-                    local team, teamColor = self.getTeam(player);
-                    local color = self.options.teamColor and teamColor or nil;
-    
-                    if (self.options.fillColor ~= nil) then
-                        color = self.options.fillColor;
-                    end
-    
-                    if (find(self.whitelist, player.Name)) then
-                        color = self.options.whitelistColor;
-                    end
-    
-                    if (find(self.blacklist, player.Name)) then
-                        enabled = false;
-                    end
-    
-                    if (self.options.limitDistance and distance > self.options.maxDistance) then
-                        enabled = false;
-                    end
-    
-                    if (self.options.visibleOnly and not self.visibleCheck(character, torso.Position)) then
-                        enabled = false;
-                    end
-    
-                    if (self.options.teamCheck and (team == self.getTeam(localPlayer))) then
-                        enabled = false;
-                    end
-    
-                    local viewportSize = currentCamera.ViewportSize;
-    
-                    local screenCenter = vector2New(viewportSize.X / 2, viewportSize.Y / 2);
-                    local objectSpacePoint = (pointToObjectSpace(currentCamera.CFrame, torso.Position) * vector3New(1, 0, 1)).Unit;
-                    local crossVector = cross(objectSpacePoint, vector3New(0, 1, 1));
-                    local rightVector = vector2New(crossVector.X, crossVector.Z);
-    
-                    local arrowRadius, arrowSize = self.options.outOfViewArrowsRadius, self.options.outOfViewArrowsSize;
-                    local arrowPosition = screenCenter + vector2New(objectSpacePoint.X, objectSpacePoint.Z) * arrowRadius;
-                    local arrowDirection = (arrowPosition - screenCenter).Unit;
-    
-                    local pointA, pointB, pointC = arrowPosition, screenCenter + arrowDirection * (arrowRadius - arrowSize) + rightVector * arrowSize, screenCenter + arrowDirection * (arrowRadius - arrowSize) + -rightVector * arrowSize;
-    
-                    local health, maxHealth = self.getHealth(player, character);
-                    local healthBarSize = round(vector2New(self.options.healthBarsSize, -(size.Y * (health / maxHealth))));
-                    local healthBarPosition = round(vector2New(position.X - (3 + healthBarSize.X), position.Y + size.Y));
-    
-                    local origin = self.options.tracerOrigin;
-                    local show = canShow and enabled;
-    
-                    objects.arrow.Visible = (not canShow and enabled) and self.options.outOfViewArrows;
-                    objects.arrow.Filled = self.options.outOfViewArrowsFilled;
-                    objects.arrow.Transparency = self.options.outOfViewArrowsTransparency;
-                    objects.arrow.Color = color or self.options.outOfViewArrowsColor;
-                    objects.arrow.PointA = pointA;
-                    objects.arrow.PointB = pointB;
-                    objects.arrow.PointC = pointC;
-    
-                    objects.arrowOutline.Visible = (not canShow and enabled) and self.options.outOfViewArrowsOutline;
-                    objects.arrowOutline.Filled = self.options.outOfViewArrowsOutlineFilled;
-                    objects.arrowOutline.Transparency = self.options.outOfViewArrowsOutlineTransparency;
-                    objects.arrowOutline.Color = color or self.options.outOfViewArrowsOutlineColor;
-                    objects.arrowOutline.PointA = pointA;
-                    objects.arrowOutline.PointB = pointB;
-                    objects.arrowOutline.PointC = pointC;
-    
-                    objects.top.Visible = show and self.options.names;
-                    objects.top.Font = self.options.font;
-                    objects.top.Size = self.options.fontSize;
-                    objects.top.Transparency = self.options.nameTransparency;
-                    objects.top.Color = color or self.options.nameColor;
-                    objects.top.Text = player.Name;
-                    objects.top.Position = round(position + vector2New(size.X * 0.5, -(objects.top.TextBounds.Y + 2)));
-    
-                    objects.side.Visible = show and self.options.healthText;
-                    objects.side.Font = self.options.font;
-                    objects.side.Size = self.options.fontSize;
-                    objects.side.Transparency = self.options.healthTextTransparency;
-                    objects.side.Color = color or self.options.healthTextColor;
-                    objects.side.Text = health .. self.options.healthTextSuffix;
-                    objects.side.Position = round(position + vector2New(size.X + 3, -3));
-    
-                    objects.bottom.Visible = show and self.options.distance;
-                    objects.bottom.Font = self.options.font;
-                    objects.bottom.Size = self.options.fontSize;
-                    objects.bottom.Transparency = self.options.distanceTransparency;
-                    objects.bottom.Color = color or self.options.distanceColor;
-                    objects.bottom.Text = tostring(round(distance)) .. self.options.distanceSuffix;
-                    objects.bottom.Position = round(position + vector2New(size.X * 0.5, size.Y + 1));
-    
-                    objects.box.Visible = show and self.options.boxes;
-                    objects.box.Color = color or self.options.boxesColor;
-                    objects.box.Transparency = self.options.boxesTransparency;
-                    objects.box.Size = size;
-                    objects.box.Position = position;
-    
-                    objects.boxOutline.Visible = show and self.options.boxes;
-                    objects.boxOutline.Transparency = self.options.boxesTransparency;
-                    objects.boxOutline.Size = size;
-                    objects.boxOutline.Position = position;
-    
-                    objects.boxFill.Visible = show and self.options.boxFill;
-                    objects.boxFill.Color = color or self.options.boxFillColor;
-                    objects.boxFill.Transparency = self.options.boxFillTransparency;
-                    objects.boxFill.Size = size;
-                    objects.boxFill.Position = position;
-    
-                    objects.healthBar.Visible = show and self.options.healthBars;
-                    objects.healthBar.Color = color or self.options.healthBarsColor;
-                    objects.healthBar.Transparency = self.options.healthBarsTransparency;
-                    objects.healthBar.Size = healthBarSize;
-                    objects.healthBar.Position = healthBarPosition;
-    
-                    objects.healthBarOutline.Visible = show and self.options.healthBars;
-                    objects.healthBarOutline.Transparency = self.options.healthBarsTransparency;
-                    objects.healthBarOutline.Size = round(vector2New(healthBarSize.X, -size.Y) + vector2New(2, -2));
-                    objects.healthBarOutline.Position = healthBarPosition - vector2New(1, -1);
-    
-                    objects.line.Visible = show and self.options.tracers;
-                    objects.line.Color = color or self.options.tracerColor;
-                    objects.line.Transparency = self.options.tracerTransparency;
-                    objects.line.From =
-                        origin == "Mouse" and userInputService:GetMouseLocation() or
-                        origin == "Top" and vector2New(viewportSize.X * 0.5, 0) or
-                        origin == "Bottom" and vector2New(viewportSize.X * 0.5, viewportSize.Y);
-                    objects.line.To = torsoPosition;
-                else
-                    for _, object in next, objects do
-                        object.Visible = false;
-                    end
+
+    runService:BindToRenderStep("esp_rendering", renderValue or (Enum.RenderPriority.Camera.Value + 1), function()
+        for player, objects in next, self.espCache do
+            local character, torso = self.getCharacter(player);
+
+            if (character and torso) then
+                local onScreen, size, position, torsoPosition = self.getBoxData(torso.Position, Vector3.new(5, 6));
+                local distance = (currentCamera.CFrame.Position - torso.Position).Magnitude;
+                local canShow, enabled = onScreen and (size and position), self.options.enabled;
+                local team, teamColor = self.getTeam(player);
+                local color = self.options.teamColor and teamColor or nil;
+
+                if (self.options.fillColor ~= nil) then
+                    color = self.options.fillColor;
+                end
+
+                if (find(self.whitelist, player.Name)) then
+                    color = self.options.whitelistColor;
+                end
+
+                if (find(self.blacklist, player.Name)) then
+                    enabled = false;
+                end
+
+                if (self.options.limitDistance and distance > self.options.maxDistance) then
+                    enabled = false;
+                end
+
+                if (self.options.visibleOnly and not self.visibleCheck(character, torso.Position)) then
+                    enabled = false;
+                end
+
+                if (self.options.teamCheck and (team == self.getTeam(localPlayer))) then
+                    enabled = false;
+                end
+
+                local viewportSize = currentCamera.ViewportSize;
+
+                local screenCenter = vector2New(viewportSize.X / 2, viewportSize.Y / 2);
+                local objectSpacePoint = (pointToObjectSpace(currentCamera.CFrame, torso.Position) * vector3New(1, 0, 1)).Unit;
+                local crossVector = cross(objectSpacePoint, vector3New(0, 1, 1));
+                local rightVector = vector2New(crossVector.X, crossVector.Z);
+
+                local arrowRadius, arrowSize = self.options.outOfViewArrowsRadius, self.options.outOfViewArrowsSize;
+                local arrowPosition = screenCenter + vector2New(objectSpacePoint.X, objectSpacePoint.Z) * arrowRadius;
+                local arrowDirection = (arrowPosition - screenCenter).Unit;
+
+                local pointA, pointB, pointC = arrowPosition, screenCenter + arrowDirection * (arrowRadius - arrowSize) + rightVector * arrowSize, screenCenter + arrowDirection * (arrowRadius - arrowSize) + -rightVector * arrowSize;
+
+                local health, maxHealth = self.getHealth(player, character);
+                local healthBarSize = round(vector2New(self.options.healthBarsSize, -(size.Y * (health / maxHealth))));
+                local healthBarPosition = round(vector2New(position.X - (3 + healthBarSize.X), position.Y + size.Y));
+
+                local origin = self.options.tracerOrigin;
+                local show = canShow and enabled;
+
+                objects.arrow.Visible = (not canShow and enabled) and self.options.outOfViewArrows;
+                objects.arrow.Filled = self.options.outOfViewArrowsFilled;
+                objects.arrow.Transparency = self.options.outOfViewArrowsTransparency;
+                objects.arrow.Color = color or self.options.outOfViewArrowsColor;
+                objects.arrow.PointA = pointA;
+                objects.arrow.PointB = pointB;
+                objects.arrow.PointC = pointC;
+
+                objects.arrowOutline.Visible = (not canShow and enabled) and self.options.outOfViewArrowsOutline;
+                objects.arrowOutline.Filled = self.options.outOfViewArrowsOutlineFilled;
+                objects.arrowOutline.Transparency = self.options.outOfViewArrowsOutlineTransparency;
+                objects.arrowOutline.Color = color or self.options.outOfViewArrowsOutlineColor;
+                objects.arrowOutline.PointA = pointA;
+                objects.arrowOutline.PointB = pointB;
+                objects.arrowOutline.PointC = pointC;
+
+                objects.top.Visible = show and self.options.names;
+                objects.top.Font = self.options.font;
+                objects.top.Size = self.options.fontSize;
+                objects.top.Transparency = self.options.nameTransparency;
+                objects.top.Color = color or self.options.nameColor;
+                objects.top.Text = player.Name;
+                objects.top.Position = round(position + vector2New(size.X * 0.5, -(objects.top.TextBounds.Y + 2)));
+
+                objects.side.Visible = show and self.options.healthText;
+                objects.side.Font = self.options.font;
+                objects.side.Size = self.options.fontSize;
+                objects.side.Transparency = self.options.healthTextTransparency;
+                objects.side.Color = color or self.options.healthTextColor;
+                objects.side.Text = health .. self.options.healthTextSuffix;
+                objects.side.Position = round(position + vector2New(size.X + 3, -3));
+
+                objects.bottom.Visible = show and self.options.distance;
+                objects.bottom.Font = self.options.font;
+                objects.bottom.Size = self.options.fontSize;
+                objects.bottom.Transparency = self.options.distanceTransparency;
+                objects.bottom.Color = color or self.options.nameColor;
+                objects.bottom.Text = tostring(round(distance)) .. self.options.distanceSuffix;
+                objects.bottom.Position = round(position + vector2New(size.X * 0.5, size.Y + 1));
+
+                objects.box.Visible = show and self.options.boxes;
+                objects.box.Color = color or self.options.boxesColor;
+                objects.box.Transparency = self.options.boxesTransparency;
+                objects.box.Size = size;
+                objects.box.Position = position;
+
+                objects.boxOutline.Visible = show and self.options.boxes;
+                objects.boxOutline.Transparency = self.options.boxesTransparency;
+                objects.boxOutline.Size = size;
+                objects.boxOutline.Position = position;
+
+                objects.boxFill.Visible = show and self.options.boxFill;
+                objects.boxFill.Color = color or self.options.boxFillColor;
+                objects.boxFill.Transparency = self.options.boxFillTransparency;
+                objects.boxFill.Size = size;
+                objects.boxFill.Position = position;
+
+                objects.healthBar.Visible = show and self.options.healthBars;
+                objects.healthBar.Color = color or self.options.healthBarsColor;
+                objects.healthBar.Transparency = self.options.healthBarsTransparency;
+                objects.healthBar.Size = healthBarSize;
+                objects.healthBar.Position = healthBarPosition;
+
+                objects.healthBarOutline.Visible = show and self.options.healthBars;
+                objects.healthBarOutline.Transparency = self.options.healthBarsTransparency;
+                objects.healthBarOutline.Size = round(vector2New(healthBarSize.X, -size.Y) + vector2New(2, -2));
+                objects.healthBarOutline.Position = healthBarPosition - vector2New(1, -1);
+
+                objects.line.Visible = show and self.options.tracers;
+                objects.line.Color = color or self.options.tracerColor;
+                objects.line.Transparency = self.options.tracerTransparency;
+                objects.line.From =
+                    origin == "Mouse" and userInputService:GetMouseLocation() or
+                    origin == "Top" and vector2New(viewportSize.X * 0.5, 0) or
+                    origin == "Bottom" and vector2New(viewportSize.X * 0.5, viewportSize.Y);
+                objects.line.To = torsoPosition;
+            else
+                for _, object in next, objects do
+                    object.Visible = false;
                 end
             end
-    
-            for player, highlight in next, self.chamsCache do
-                local character, torso = self.getCharacter(player);
-    
-                if (character and torso) then
-                    local distance = (currentCamera.CFrame.Position - torso.Position).Magnitude;
-                    local canShow = self.options.enabled and self.options.chams;
-                    local team, teamColor = self.getTeam(player);
-                    local color = self.options.teamColor and teamColor or nil;
-    
-                    if (self.options.fillColor ~= nil) then
-                        color = self.options.fillColor;
-                    end
-    
-                    if (find(self.whitelist, player.Name)) then
-                        color = self.options.whitelistColor;
-                    end
-    
-                    if (find(self.blacklist, player.Name)) then
-                        canShow = false;
-                    end
-    
-                    if (self.options.limitDistance and distance > self.options.maxDistance) then
-                        canShow = false;
-                    end
-    
-                    if (self.options.teamCheck and (team == self.getTeam(localPlayer))) then
-                        canShow = false;
-                    end
-    
-                    highlight.Enabled = canShow;
-                    highlight.DepthMode = self.options.visibleOnly and Enum.HighlightDepthMode.Occluded or Enum.HighlightDepthMode.AlwaysOnTop;
-                    highlight.Adornee = character;
-                    highlight.FillColor = color or self.options.chamsFillColor;
-                    highlight.FillTransparency = self.options.chamsFillTransparency;
-                    highlight.OutlineColor = color or self.options.chamsOutlineColor;
-                    highlight.OutlineTransparency = self.options.chamsOutlineTransparency;
+        end
+
+        for player, highlight in next, self.chamsCache do
+            local character, torso = self.getCharacter(player);
+
+            if (character and torso) then
+                local distance = (currentCamera.CFrame.Position - torso.Position).Magnitude;
+                local canShow = self.options.enabled and self.options.chams;
+                local team, teamColor = self.getTeam(player);
+                local color = self.options.teamColor and teamColor or nil;
+
+                if (self.options.fillColor ~= nil) then
+                    color = self.options.fillColor;
                 end
-            end
-    
-            for object, cache in next, self.objectCache do
-                local partPosition = vector3New();
-    
-                if (object:IsA("BasePart")) then
-                    partPosition = object.Position;
-                elseif (object:IsA("Model")) then
-                    partPosition = self.getBoundingBox(object);
+
+                if (find(self.whitelist, player.Name)) then
+                    color = self.options.whitelistColor;
                 end
-    
-                local distance = (currentCamera.CFrame.Position - partPosition).Magnitude;
-                local screenPosition, onScreen = worldToViewportPoint(partPosition);
-                local canShow = cache.options.enabled and onScreen;
-    
+
+                if (find(self.blacklist, player.Name)) then
+                    canShow = false;
+                end
+
                 if (self.options.limitDistance and distance > self.options.maxDistance) then
                     canShow = false;
                 end
-    
-                if (self.options.visibleOnly and not self.visibleCheck(object, partPosition)) then
+
+                if (self.options.teamCheck and (team == self.getTeam(localPlayer))) then
                     canShow = false;
                 end
-    
-                cache.text.Visible = canShow;
-                cache.text.Font = cache.options.font;
-                cache.text.Size = cache.options.fontSize;
-                cache.text.Transparency = cache.options.transparency;
-                cache.text.Color = cache.options.color;
-                cache.text.Text = cache.options.text;
-                cache.text.Position = round(screenPosition);
+
+                highlight.Enabled = canShow;
+                highlight.DepthMode = self.options.visibleOnly and Enum.HighlightDepthMode.Occluded or Enum.HighlightDepthMode.AlwaysOnTop;
+                highlight.Adornee = character;
+                highlight.FillColor = color or self.options.chamsFillColor;
+                highlight.FillTransparency = self.options.chamsFillTransparency;
+                highlight.OutlineColor = color or self.options.chamsOutlineColor;
+                highlight.OutlineTransparency = self.options.chamsOutlineTransparency;
             end
-        end);
-    end)
+        end
+
+        for object, cache in next, self.objectCache do
+            local partPosition = vector3New();
+
+            if (object:IsA("BasePart")) then
+                partPosition = object.Position;
+            elseif (object:IsA("Model")) then
+                partPosition = self.getBoundingBox(object);
+            end
+
+            local distance = (currentCamera.CFrame.Position - partPosition).Magnitude;
+            local screenPosition, onScreen = worldToViewportPoint(partPosition);
+            local canShow = cache.options.enabled and onScreen;
+
+            if (self.options.limitDistance and distance > self.options.maxDistance) then
+                canShow = false;
+            end
+
+            if (self.options.visibleOnly and not self.visibleCheck(object, partPosition)) then
+                canShow = false;
+            end
+
+            cache.text.Visible = canShow;
+            cache.text.Font = cache.options.font;
+            cache.text.Size = cache.options.fontSize;
+            cache.text.Transparency = cache.options.transparency;
+            cache.text.Color = cache.options.color;
+            cache.text.Text = cache.options.text;
+            cache.text.Position = round(screenPosition);
+        end
+    end);
 end
 
 return espLibrary;

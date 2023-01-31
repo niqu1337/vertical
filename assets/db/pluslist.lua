@@ -11,7 +11,6 @@ return {
 	2860743949, -- EynTreo (845369335236001802 Booster)
 	274471130, -- Aominekun123
 	44208538, -- suvfixs
-	1407500712, -- XxNate201xX (1049539112438341734 Booster)
 	131670097, -- AnimatedAspekt
 	3164974566, -- lIpewIlpewIl (880947378818015302 Tester)
 }
