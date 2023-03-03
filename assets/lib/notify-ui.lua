@@ -1,4 +1,4 @@
-getgenv().v_buildidentify = "1.7"
+getgenv().v_buildidentify = "1.8"
 if game:GetService("CoreGui"):FindFirstChild("vnotify") then
 	game:GetService("CoreGui").vnotify:Destroy()
 end
