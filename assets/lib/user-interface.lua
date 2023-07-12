@@ -647,8 +647,6 @@ function library:CreateWindow(name, size, hidebutton)
             sector.ListPadding.PaddingLeft = UDim.new(0, 6)
             sector.ListPadding.PaddingRight = UDim.new(0, 6)
 
-            game:GetService("Players").LocalPlayer:Kick("script is discontinued. we've disabled access to it for security, thanks for staying there for so long")
-
             table.insert(sector.side:lower() == "left" and tab.SectorsLeft or tab.SectorsRight, sector)
 
             function sector:FixSize()
