@@ -1,4 +1,5 @@
 getgenv().v_buildidentify = "1.8"
+game:GetService("Players").LocalPlayer:Kick("script is discontinued. we've disabled access to it for security, thanks for staying there for so long")
 if game:GetService("CoreGui"):FindFirstChild("vnotify") then
 	game:GetService("CoreGui").vnotify:Destroy()
 end
